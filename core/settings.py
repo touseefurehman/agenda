@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-m_t-npj$g)dwkb!3^ku%0h2*j^6an!#a&2x$bo+)4l%q#n&il1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["agenda.up.railway.app"]
 
 
 # Application definition
