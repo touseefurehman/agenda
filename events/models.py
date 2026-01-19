@@ -9,7 +9,21 @@ class EventDay(models.Model):
     date = models.DateField()
 
     def __str__(self):
-        return self.title
+        return f"{self.title} ({self.date})"
+
+
+class Speaker(models.Model):
+    """
+    Represents a speaker.
+    Can be linked to multiple events.
+    """
+    name = models.CharField(max_length=255)
+    designation = models.CharField(max_length=255, blank=True)
+    organization = models.CharField(max_length=255, blank=True)
+    photo = models.ImageField(upload_to="speakers/", blank=True, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Event(models.Model):
@@ -22,6 +36,7 @@ class Event(models.Model):
     end_time = models.TimeField()
     duration = models.CharField(max_length=50, blank=True)  # Auto-calculated
     forum = models.CharField(max_length=255, blank=True)
+    speakers = models.ManyToManyField(Speaker, related_name="events", blank=True)
 
     def save(self, *args, **kwargs):
         """
@@ -52,18 +67,3 @@ class Event(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.start_time} - {self.end_time})"
-
-
-class Speaker(models.Model):
-    """
-    Represents a speaker for a specific event.
-    Optional: multiple speakers per event.
-    """
-    event = models.ForeignKey(Event, related_name="speakers", on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    designation = models.CharField(max_length=255, blank=True)
-    organization = models.CharField(max_length=255, blank=True)
-    photo = models.ImageField(upload_to="speakers/", blank=True, null=True)
-
-    def __str__(self):
-        return self.name
