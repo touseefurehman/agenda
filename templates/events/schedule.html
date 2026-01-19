@@ -62,7 +62,10 @@
             border-radius: 10px;
             margin-bottom: 8px;
         }
-        .nav-link { color: #ffffff; }
+
+        .nav-link {
+            color: #ffffff;
+        }
     </style>
 </head>
 
@@ -141,8 +144,8 @@
             {% for day in days %}
             <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="day{{ day.id }}">
                 <div class="card schedule-card p-4"
-                style="background-color: #000000; border: #00ff00 3px solid; box-shadow: 0 0 3px #00ff00, 0 0 10px #00ff00;">
-                {% for event in day.events.all %}
+                    style="background-color: #000000; border: #00ff00 3px solid; box-shadow: 0 0 3px #00ff00, 0 0 10px #00ff00;">
+                    {% for event in day.events.all %}
                     <div class="row">
                         <div class="col-lg-2 col-md-3 col-sm-3">
                             <!-- Time -->
@@ -160,40 +163,55 @@
                             </div>
                             <p class="fw-semibold text-light mb-3">{{ event.forum }}</p>
 
-                 {% if event.speakers.exists %}
+                            {% if event.speakers.exists %}
                             <h6 class="fw-bold mb-3 text-light">Speakers:</h6>
                             <div class="row">
                                 {% for speaker in event.speakers.all %}
-                                    <div class="col-4 text-center mb-3 d-flex gap-3">
+                                <div class="col-4 text-center mb-3 d-flex gap-3">
 
 
-                                        {% if speaker.photo %}
-                                            <img src="{{ speaker.photo.url }}" alt="{{ speaker.name }}" class=" mb-2" style="width:70px; height:70px; object-fit:cover;">
-                                        {% else %}
-                                            <div class="rounded-circle bg-secondary mb-2" style="width:70px; height:70px;"></div>
-                                        {% endif %}
-                                        <div class="d-flex flex-column align-items-left">
-                                         
-                                         
-                                         
+                                    {% if speaker.photo %}
+                                    <img src="{{ speaker.photo.url }}" alt="{{ speaker.name }}" class=" mb-2"
+                                        style="width:70px; height:70px; object-fit:cover;">
+                                    {% else %}
+                                    <div class="rounded-circle bg-secondary mb-2" style="width:70px; height:70px;">
+                                    </div>
+                                    {% endif %}
+                                    <div class="" style="color: white;text-align: left;">
 
-                                            {{ speaker.name }}
+
+                                        <h6 style="font-size: 12px;">
+                                            <b>
+
+                                                {{ speaker.name }}
+                                            </b>
+                                        </h6>
+                                        <h6 style="font-size: 10px;">
+
                                             {% if speaker.designation %}
                                             {{ speaker.designation }}
                                             {% endif %}
+                                        </h6>
+                                        <hr style="color: white;">
+                                        <h6 style="font-size: 10px;">
+
                                             {% if speaker.organization %}
                                             {{ speaker.organization }}
                                             {% endif %}
-                                        </div>
+
+                                        </h6>
+
                                     </div>
+                                </div>
                                 {% endfor %}
                             </div>
-                        {% endif %}
+                            {% endif %}
 
 
                         </div>
                     </div>
-                    <Hr style="color: yellow;"></Hr>
+                    <Hr style="color: yellow;">
+                    </Hr>
                     {% endfor %}
                 </div>
             </div>
