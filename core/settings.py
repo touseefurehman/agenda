@@ -146,9 +146,11 @@ JAZZMIN_SETTINGS = {
     "site_title": "Admin",
     "site_header": "Global Currency Forum",
     "site_brand": "Global Currency Forum",
+    "site_logo": "images/admin_logo.png",
 
     "theme": "darkly",              # Dark theme
     "navigation_expanded": True,    # Sidebar expanded
+    "show_ui_builder": True,
 
     "welcome_sign": "Welcome to Global Currency Forum Admin",
 }
