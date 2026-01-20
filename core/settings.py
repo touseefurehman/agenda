@@ -138,7 +138,9 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'  # 👈 for production
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://agenda.up.railway.app",  # your deployed URL
+]
 
 JAZZMIN_SETTINGS = {
     "site_title": "Admin",
