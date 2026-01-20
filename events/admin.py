@@ -1,83 +1,133 @@
 from django.contrib import admin
 from django.forms import TimeInput
 from django.db import models
+from django.utils.html import mark_safe
+from django import forms
+
 from import_export.admin import ImportExportModelAdmin
 from import_export.formats.base_formats import CSV
 from import_export import resources, fields
 from import_export.widgets import CharWidget
+
 from .models import EventDay, Event, Speaker
 
 
-# ----------------------------
-# Speaker Resource for Import/Export
-# ----------------------------
+# =================================================
+# Speaker Resource (Import / Export)
+# =================================================
 class SpeakerResource(resources.ModelResource):
     photo_url = fields.Field(
-        column_name='photo_url',  # exported CSV column name
-        attribute='photo',        # CloudinaryField in your model
+        column_name='photo_url',
+        attribute='photo',
         widget=CharWidget()
     )
 
     class Meta:
         model = Speaker
-        # Only export/import these fields
         fields = ('name', 'designation', 'organization', 'photo_url')
         export_order = ('name', 'designation', 'organization', 'photo_url')
-        import_id_fields = ()  # Do not require 'id' in CSV to import
+        import_id_fields = ()
 
 
-# ----------------------------
-# Event Admin with Import/Export
-# ----------------------------
-@admin.register(Event)
-class EventAdmin(ImportExportModelAdmin):
-    list_display = ('title', 'day', 'start_time', 'end_time', 'duration', 'forum')
-    readonly_fields = ('duration',)
-    list_filter = ('day', 'speakers')
-    search_fields = ('title', 'forum', 'speakers__name')
-    filter_horizontal = ('speakers',)
-    formfield_overrides = {
-        models.TimeField: {'widget': TimeInput(attrs={'type': 'time', 'step': 60})}
-    }
+# =================================================
+# Speaker Admin
+# =================================================
+@admin.register(Speaker)
+class SpeakerAdmin(ImportExportModelAdmin):
+    resource_class = SpeakerResource
+    list_display = ('photo_preview', 'name', 'designation', 'organization')
+    search_fields = ('name', 'designation', 'organization')
+    list_filter = ('organization',)
     formats = [CSV]
 
+    def photo_preview(self, obj):
+        if obj.photo:
+            return mark_safe(
+                f'<img src="{obj.photo.url}" style="height:42px;border-radius:6px;" />'
+            )
+        return "—"
 
-# ----------------------------
-# EventDay Admin with inline Events + Import/Export
-# ----------------------------
-class EventInline(admin.TabularInline):
+    photo_preview.short_description = "Photo"
+
+
+# =================================================
+# Event Admin Form (Hide Already Selected Speakers)
+# =================================================
+class EventAdminForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            # Exclude already-selected speakers from the selectable list
+            self.fields['speakers'].queryset = Speaker.objects.exclude(
+                pk__in=self.instance.speakers.values_list('pk', flat=True)
+            )
+        else:
+            self.fields['speakers'].queryset = Speaker.objects.all()
+
+
+# =================================================
+# Event Admin
+# =================================================
+@admin.register(Event)
+class EventAdmin(ImportExportModelAdmin):
+    form = EventAdminForm
+
+    list_display = (
+        'title',
+        'day',
+        'start_time',
+        'end_time',
+        'duration',
+        'forum',
+    )
+    list_filter = ('day',)
+    search_fields = ('title', 'forum')
+    readonly_fields = ('duration',)
+    raw_id_fields = ('speakers',)  # clean UI for selecting existing speakers
+    formats = [CSV]
+
+    formfield_overrides = {
+        models.TimeField: {'widget': TimeInput(attrs={'type': 'time'})}
+    }
+
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'day', 'forum')
+        }),
+        ('Schedule', {
+            'fields': ('start_time', 'end_time', 'duration')
+        }),
+        ('Speakers', {
+            'fields': ('speakers',),
+            'description': 'Select speakers not already added to this event.',
+        }),
+    )
+
+
+# =================================================
+# Event Inline (inside EventDay)
+# =================================================
+class EventInline(admin.StackedInline):
     model = Event
     extra = 1
-    fields = ('title', 'start_time', 'end_time', 'duration', 'forum', 'speakers')
     readonly_fields = ('duration',)
-    filter_horizontal = ('speakers',)
+    raw_id_fields = ('speakers',)
+
     formfield_overrides = {
-        models.TimeField: {'widget': TimeInput(attrs={'type': 'time', 'step': 60})}
+        models.TimeField: {'widget': TimeInput(attrs={'type': 'time'})}
     }
 
 
+# =================================================
+# EventDay Admin
+# =================================================
 @admin.register(EventDay)
 class EventDayAdmin(ImportExportModelAdmin):
     list_display = ('title', 'date')
     search_fields = ('title',)
     inlines = [EventInline]
     formats = [CSV]
-
-
-# ----------------------------
-# Speaker Admin with Import/Export
-# ----------------------------
-@admin.register(Speaker)
-class SpeakerAdmin(ImportExportModelAdmin):
-    resource_class = SpeakerResource  # link the resource
-    list_display = ('name', 'designation', 'organization')
-    search_fields = ('name', 'organization', 'designation')
-    formats = [CSV]
-
-    # Optional: display small image in admin list
-    def photo_thumbnail(self, obj):
-        if obj.photo:
-            return f'<img src="{obj.photo.url}" style="height:50px;"/>'
-        return "-"
-    photo_thumbnail.short_description = 'Photo'
-    photo_thumbnail.allow_tags = True
