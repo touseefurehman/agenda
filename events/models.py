@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import datetime, timedelta
-
+import cloudinary.models
 class EventDay(models.Model):
     """
     Represents a single day of events.
@@ -20,7 +20,7 @@ class Speaker(models.Model):
     name = models.CharField(max_length=255)
     designation = models.CharField(max_length=255, blank=True)
     organization = models.CharField(max_length=255, blank=True)
-    photo = models.ImageField(upload_to="speakers/", blank=True, null=True)
+    photo = cloudinary.models.CloudinaryField('image', blank=True, null=True)
 
     def __str__(self):
         return self.name

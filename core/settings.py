@@ -20,6 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+import cloudinary
 SECRET_KEY = 'django-insecure-m_t-npj$g)dwkb!3^ku%0h2*j^6an!#a&2x$bo+)4l%q#n&il1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -39,6 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'events',
+    'import_export',
+    'cloudinary',
+    'cloudinary_storage',
+
 
 ]
 
@@ -59,6 +64,7 @@ ROOT_URLCONF = 'core.urls'
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 TEMPLATES = [
     {
@@ -154,3 +160,15 @@ JAZZMIN_SETTINGS = {
 
     "welcome_sign": "Welcome to Global Currency Forum Admin",
 }
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'djm9pvxo5',
+    'API_KEY': '199526248914836',
+    'API_SECRET': 'rhZ69LN-37sZtuKY65hSMo3S5iI',
+}
+
+cloudinary.config(
+    cloud_name = CLOUDINARY_STORAGE['CLOUD_NAME'],
+    api_key = CLOUDINARY_STORAGE['API_KEY'],
+    api_secret = CLOUDINARY_STORAGE['API_SECRET'],
+    secure = True
+)
