@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ["agenda.up.railway.app",'*']
 # Application definition
 
 INSTALLED_APPS = [
+    "jazzmin",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'events',
+
 ]
 
 MIDDLEWARE = [
@@ -135,3 +137,16 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'  # 👈 for production
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Admin",
+    "site_header": "Global Currency Forum",
+    "site_brand": "Global Currency Forum",
+
+    "theme": "darkly",              # Dark theme
+    "navigation_expanded": True,    # Sidebar expanded
+
+    "welcome_sign": "Welcome to Global Currency Forum Admin",
+}
