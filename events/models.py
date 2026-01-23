@@ -6,6 +6,8 @@ class EventDay(models.Model):
     Represents a single day of events.
     """
     title = models.CharField(max_length=100)
+    details = models.CharField(max_length=100, blank=True, default="", null=True)
+
     date = models.DateField()
 
     def __str__(self):

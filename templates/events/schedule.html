@@ -78,8 +78,30 @@
             display: none;
             /* hide scrollbar */
         }
+     .nav-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                /* prevent wrapping */
+                padding-left: 0.5rem;
+                /* add padding on left */
+                padding-right: 0.5rem;
+                /* add padding on right */
+                -webkit-overflow-scrolling: touch;
+            }
 
+   .nav-tabs .nav-item {
+                flex: 0 0 auto;
+                /* prevent shrinking */
+            }
 
+            .nav-tabs .nav-link {
+                padding: 0.4rem 0.6rem;
+                /* smaller buttons */
+                font-size: 0.8rem;
+                text-align: center;
+                white-space: nowrap;
+                /* prevent line breaks */
+            }
         /* Small screens */
         /* Horizontal scrolling for small screens */
         @media (max-width: 768px) {
@@ -131,18 +153,30 @@
         <li class="nav-item">
             <button class="nav-link {% if forloop.first %}active{% endif %}" data-bs-toggle="tab"
                 data-bs-target="#day{{ day.id }}" type="button">
-                {{ day.title }}<br>
+                {{ day.title }}<br> 
+           
+
                 <small>{{ day.date|date:"D, M d, Y" }}</small>
             </button>
         </li>
+    
         {% endfor %}
     </ul>
 </div>
 
         <!-- Tab Content -->
         <div class="tab-content">
+     
             {% for day in days %}
+            
             <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="day{{ day.id }}">
+                   {% if day.details %}
+                    <div class="mb-4 text-center">
+                        <p class="text-light fw-semibold" style="font-size: 24px;">
+                            {{ day.details }}
+                        </p>
+                    </div>
+                    {% endif %}
                 <div class="card schedule-card p-4"
                     style="background-color: #000000; border: rgb(57, 209, 90) 2px solid; box-shadow: 0 0 3px rgb(57, 209, 90), 0 0 10px rgb(57, 209, 90);">
                     {% for event in day.events.all %}
