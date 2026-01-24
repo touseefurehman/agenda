@@ -17,8 +17,30 @@
             background: #000000;
         }
 
+        /* Heading */
+        h2.fw-bold.mb-4.text-center {
+            background: linear-gradient(to right, rgb(57, 209, 90) 50%, rgb(56, 153, 236) 60%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 56px;
+            font-weight: bold;
+        }
+
         .nav-tabs {
             border-bottom: none;
+            overflow-x: auto;
+            flex-wrap: nowrap;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .nav-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-tabs .nav-item {
+            flex: 0 0 auto;
         }
 
         .nav-tabs .nav-link {
@@ -26,9 +48,12 @@
             background: rgb(56, 153, 236);
             margin-right: 10px;
             border-radius: 12px;
-            padding: 12px 20px;
+            padding: 0.4rem 0.6rem;
             font-weight: 600;
-            color: #ffffffff;
+            color: #ffffff;
+            font-size: 0.8rem;
+            text-align: center;
+            white-space: nowrap;
             box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
         }
 
@@ -39,16 +64,16 @@
 
         .schedule-card {
             border-radius: 18px;
-            border: none;
-            background: #fff;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+            border: rgb(57, 209, 90) 2px solid;
+            background: #000000;
+            box-shadow: 0 0 3px rgb(57, 209, 90), 0 0 10px rgb(57, 209, 90);
             margin-bottom: 20px;
         }
 
         .time-badge {
             font-weight: 700;
             font-size: 1.1rem;
-            color: #0d6efd;
+            color: rgb(57, 209, 90);
         }
 
         .meta {
@@ -63,189 +88,135 @@
             margin-bottom: 8px;
         }
 
-        .nav-link {
-            color: #ffffff;
+        .event-title {
+            color: #fff;
         }
 
-        /* Default size */
-        .nav-tabs .nav-link {
-            padding: 0.75rem 1.2rem;
-            font-size: 1rem;
-            text-align: center;
+        .speaker-img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
         }
 
-        .nav-tabs::-webkit-scrollbar {
-            display: none;
-            /* hide scrollbar */
+        .speaker-placeholder {
+            width: 70px;
+            height: 70px;
         }
-     .nav-tabs {
-                overflow-x: auto;
-                flex-wrap: nowrap;
-                /* prevent wrapping */
-                padding-left: 0.5rem;
-                /* add padding on left */
-                padding-right: 0.5rem;
-                /* add padding on right */
-                -webkit-overflow-scrolling: touch;
-            }
 
-   .nav-tabs .nav-item {
-                flex: 0 0 auto;
-                /* prevent shrinking */
-            }
+        .speaker-info {
+            color: white;
+            text-align: left;
+        }
 
-            .nav-tabs .nav-link {
-                padding: 0.4rem 0.6rem;
-                /* smaller buttons */
-                font-size: 0.8rem;
-                text-align: center;
-                white-space: nowrap;
-                /* prevent line breaks */
-            }
-        /* Small screens */
-        /* Horizontal scrolling for small screens */
+        .speaker-info h6.name {
+            font-size: 12px;
+        }
+
+        .speaker-info h6.meta {
+            font-size: 10px;
+        }
+
+        hr.yellow {
+            color: yellow;
+        }
+
         @media (max-width: 768px) {
-            .nav-tabs {
-                overflow-x: auto;
-                flex-wrap: nowrap;
-                /* prevent wrapping */
-                padding-left: 0.5rem;
-                /* add padding on left */
-                padding-right: 0.5rem;
-                /* add padding on right */
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .nav-tabs .nav-item {
-                flex: 0 0 auto;
-                /* prevent shrinking */
-            }
-
             .nav-tabs .nav-link {
                 padding: 0.4rem 0.6rem;
-                /* smaller buttons */
                 font-size: 0.8rem;
-                text-align: center;
-                white-space: nowrap;
-                /* prevent line breaks */
             }
         }
     </style>
-
 </head>
 
 <body>
 
     <div class="container py-5">
-        <h2 class="fw-bold mb-4 text-center" style="
-    background: linear-gradient(to right, rgb(57, 209, 90) 50%, rgb(56, 153, 236) 60%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-size: 56px;
-    font-weight: bold;">
+        <h2 class="fw-bold mb-4 text-center">
             Event Schedule
         </h2>
 
-        <!-- Tabs -->
-  <div class="tab-wrapper d-flex justify-content-center overflow-auto">
-    <ul class="nav nav-tabs day-tabs mb-4" role="tablist">
-        {% for day in days %}
-        <li class="nav-item">
-            <button class="nav-link {% if forloop.first %}active{% endif %}" data-bs-toggle="tab"
-                data-bs-target="#day{{ day.id }}" type="button">
-                {{ day.title }}<br> 
-           
+        <div class="tab-wrapper d-flex justify-content-center overflow-auto">
+            <ul class="nav nav-tabs day-tabs mb-4" role="tablist">
+                {% for day in days %}
+                <li class="nav-item">
+                    <button class="nav-link {% if forloop.first %}active{% endif %}" data-bs-toggle="tab"
+                        data-bs-target="#day{{ day.id }}" type="button">
+                        {{ day.title }}<br>
+                        <small>{{ day.date|date:"D, M d, Y" }}</small>
+                    </button>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
 
-                <small>{{ day.date|date:"D, M d, Y" }}</small>
-            </button>
-        </li>
-    
-        {% endfor %}
-    </ul>
-</div>
-
-        <!-- Tab Content -->
         <div class="tab-content">
-     
             {% for day in days %}
-            
             <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="day{{ day.id }}">
-                   {% if day.details %}
-                    <div class="mb-4 text-center">
-                        <p class="text-light fw-semibold" style="font-size: 24px;">
-                            {{ day.details }}
-                        </p>
-                    </div>
-                    {% endif %}
-                <div class="card schedule-card p-4"
-                    style="background-color: #000000; border: rgb(57, 209, 90) 2px solid; box-shadow: 0 0 3px rgb(57, 209, 90), 0 0 10px rgb(57, 209, 90);">
+                {% if day.details %}
+                <div class="mb-4 text-center">
+                    <p class="text-light fw-semibold" style="font-size: 24px;">
+                        {{ day.details }}
+                    </p>
+                </div>
+                {% endif %}
+
+                <div class="card schedule-card p-4">
                     {% for event in day.events.all %}
                     <div class="row">
                         <div class="col-lg-2 col-md-3 col-sm-3">
-                            <!-- Time -->
-                            <div class="time-badge mb-2" style="color: rgb(57, 209, 90);">
+                            <div class="time-badge mb-2">
                                 <i class="bi bi-clock"></i>
                                 {{ event.start_time|time:"g:i A" }} - {{ event.end_time|time:"g:i A" }}
                             </div>
                         </div>
+
                         <div class="col-lg-10 col-md-9 col-sm-9">
-                            <!-- Title -->
-                            <h4 class="fw-bold mb-1" style="color: #fff;">{{ event.title }}</h4>
-                            <!-- Meta -->
+                            <h4 class="fw-bold mb-1 event-title">{{ event.title }}</h4>
+
                             <div class="meta mb-2">
                                 <p><i class="fa fa-clock-o"></i> {{ event.duration }}</p>
                             </div>
+
                             <p class="fw-semibold text-light mb-3">{{ event.forum }}</p>
 
                             {% if event.speakers.exists %}
                             <h6 class="fw-bold mb-3 text-light">Speakers:</h6>
                             <div class="row">
                                 {% for speaker in event.speakers.all %}
-                                <div class="col-lg-4 col-md-6 col-sm-12  text-center mb-3 d-flex gap-3">
-
+                                <div class="col-lg-4 col-md-6 col-sm-12 text-center mb-3 d-flex gap-3">
 
                                     {% if speaker.photo %}
-                                    <img src="{{ speaker.photo.url }}" alt="{{ speaker.name }}" class=" mb-2"
-                                        style="width:70px; height:70px; object-fit:cover;">
+                                    <img src="{{ speaker.photo.url }}" alt="{{ speaker.name }}"
+                                        class="speaker-img mb-2">
                                     {% else %}
-                                    <div class="rounded-circle bg-secondary mb-2" style="width:70px; height:70px;">
-                                    </div>
+                                    <div class="rounded-circle bg-secondary mb-2 speaker-placeholder"></div>
                                     {% endif %}
-                                    <div class="" style="color: white;text-align: left;">
 
+                                    <div class="speaker-info">
+                                        <h6 class="name"><b>{{ speaker.name }}</b></h6>
 
-                                        <h6 style="font-size: 12px;">
-                                            <b>
-
-                                                {{ speaker.name }}
-                                            </b>
-                                        </h6>
-                                        <h6 style="font-size: 10px;">
-
+                                        <h6 class="meta">
                                             {% if speaker.designation %}
                                             {{ speaker.designation }}
                                             {% endif %}
                                         </h6>
-                                        <hr style="color: white;">
-                                        <h6 style="font-size: 10px;">
 
+                                        <hr>
+
+                                        <h6 class="meta">
                                             {% if speaker.organization %}
                                             {{ speaker.organization }}
                                             {% endif %}
-
                                         </h6>
-
                                     </div>
                                 </div>
                                 {% endfor %}
                             </div>
                             {% endif %}
-
-
                         </div>
                     </div>
-                    <Hr style="color: yellow;">
-                    </Hr>
+                    <hr class="yellow">
                     {% endfor %}
                 </div>
             </div>
@@ -253,26 +224,6 @@
         </div>
     </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
