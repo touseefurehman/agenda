@@ -23,6 +23,7 @@ class Speaker(models.Model):
     designation = models.CharField(max_length=255, blank=True)
     organization = models.CharField(max_length=255, blank=True)
     photo = cloudinary.models.CloudinaryField('image', blank=True, null=True)
+    link = models.URLField(blank=True)
 
     def __str__(self):
         return self.name
