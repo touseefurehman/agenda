@@ -210,34 +210,29 @@
                         {% if event.speakers.exists %}
                         <h6 class="fw-bold mb-3 text-light">Speakers:</h6>
 
-                        <div class="row">
-                            {% for speaker in event.speakers.all %}
-                            <div class="col-lg-6 col-md-6 col-sm-12 mb-3 d-flex gap-3 speaker-card">
+                       <div class="row">
+                                {% for speaker in event.speakers.all %}
+                                <div class="col-lg-6 col-md-6 col-sm-12 mb-3">
+                                    <a href="{{ speaker.link }}" class="d-flex gap-3 speaker-card text-decoration-none text-dark">
+                                        
+                                        {% if speaker.photo %}
+                                        <img src="{{ speaker.photo.url }}" alt="{{ speaker.name }}" class="speaker-img">
+                                        {% else %}
+                                        <div class="rounded-circle bg-secondary speaker-placeholder"></div>
+                                        {% endif %}
 
-                                {% if speaker.photo %}
-                                <img src="{{ speaker.photo.url }}" alt="{{ speaker.name }}" class="speaker-img">
-                                {% else %}
-                                <div class="rounded-circle bg-secondary speaker-placeholder"></div>
-                                {% endif %}
+                                        <div class="speaker-info">
+                                            <h6 class="name"><b>{{ speaker.name }}</b></h6>
+                                            <h6 class="meta">{{ speaker.designation }}</h6>
+                                            <hr>
+                                            <h6 class="meta">{{ speaker.organization }}</h6>
+                                        </div>
 
-                                <div class="speaker-info">
-                                    <h6 class="name"><b>{{ speaker.name }}</b></h6>
-
-                                    <h6 class="meta">{{ speaker.designation }}</h6>
-                                    <hr>
-                                    <h6 class="meta">{{ speaker.organization }}</h6>
-
-                                    {% if speaker.link %}
-                                    <a href="{{ speaker.link }}" target="_blank"
-                                       class="btn btn-sm mt-2"
-                                       style="background-color: rgb(56,153,236); color:white;">
-                                        View Profile
                                     </a>
-                                    {% endif %}
                                 </div>
+                                {% endfor %}
                             </div>
-                            {% endfor %}
-                        </div>
+
                         {% endif %}
                     </div>
                 </div>
