@@ -180,7 +180,7 @@
 
             {% if day.details %}
             <div class="mb-4 text-center">
-                <p class="text-light fw-semibold" style="font-size:24px;">
+                <p class="text- fw-semibold" style="font-size:24px;">
                     {{ day.details }}
                 </p>
             </div>
@@ -205,10 +205,10 @@
                             <i class="bi bi-clock"></i> {{ event.duration }}
                         </div>
 
-                        <p class="fw-semibold text-light mb-3">{{ event.forum }}</p>
+                        <p class="fw-semibold text- mb-3">{{ event.forum }}</p>
 
                         {% if event.speakers.exists %}
-                        <h6 class="fw-bold mb-3 text-light">Speakers:</h6>
+                        <h6 class="fw-bold mb-3 text-">Speakers:</h6>
 
                        <div class="row">
                                 {% for speaker in event.speakers.all %}
